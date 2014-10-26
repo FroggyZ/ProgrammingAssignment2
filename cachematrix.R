@@ -2,20 +2,20 @@
 ##                 ASSIGNMENT 2 - MATRIX INVERSION IN CACHE                   ##
 ################################################################################
 
-## The first function "makeCacheMatrix" creates a special "matrix", which is 
-## a list containing four (4) functions:
-##      setMx: to set the value of the Matrix
-##      getMX: to get the value of the Matrix
-##      setinverse: to set the value of the Inversed Matrix
-##      getinverse: to get the value of the Inversed Matrix
+## The first function "makeCacheMatrix" creates a special "list" vector, 
+## containing four (4) functions:
+##      setMx -------> to set the value of the original Matrix to be inverted
+##      getMX -------> to get the value of the original Matrix to be inverted
+##      setinverse --> to set the value of the Inversed Matrix
+##      getinverse --> to get the value of the Inversed Matrix
 
-## function "makeCacheMatrix" takes a matrix "A" as an argument
+## Function "makeCacheMatrix" takes, as argument, a matrix "A":
 makeCacheMatrix <- function(A = matrix()) {
         
         ## First, it sets locally "invA" to NULL
         invA <- NULL
         
-        ## function "setMX" nested in "makeCacheMatrix"
+        ## Function "setMX" nested in "makeCacheMatrix":
         ## creates two (2) variables with the super assignment operator
         ## to update values of matrices "A" and "invA" 
         ## (stored outside the "makeCacheMatrix" function environment)
@@ -24,23 +24,23 @@ makeCacheMatrix <- function(A = matrix()) {
                 invA <<- NULL
         }
         
-        ## function "getMx" nested in makeCacheMatrix
+        ## Function "getMx" nested in makeCacheMatrix:
         ## gets the value of the "A" matrix
         getMx <- function() A
         
-        ## function "setinverse" nested in makeCacheMatrix
+        ## Function "setinverse" nested in makeCacheMatrix:
         ## will do the matrix inversion with solve function
         ## and update - with its results - the value of "invA"
         ## (stored outside the "makeCacheMatrix" function environment)
         setinverse <- function(solve) invA <<- solve
         
-        ## function "getinverse" nested in makeCacheMatrix
+        ## Function "getinverse" nested in makeCacheMatrix
         ## gets the value of the "invA" matrix
         getinverse <- function() invA
         
-        ## function "makeCacheMatrix" creates a list of these
-        ## four (4) functions, which can also be used to manipulate
-        ## each the matrix "A" items
+        ## Function "makeCacheMatrix" is a list of these four (4) functions,
+        ## which can also be used individualy (as with regular list of elements)
+        ## to manipulate each items of matrix "A"
         list(setMx = setMx, 
              getMx = getMx, 
              setinverse = setinverse,
@@ -48,21 +48,21 @@ makeCacheMatrix <- function(A = matrix()) {
 }
 
 
-## The second function "cacheSolve" calculates the inverse of the special 
-## "matrix" created with the above function. However, it first checks to see
-## if the matrix has already been inversed. If so, it gets the inversed matrix
-## from the cache and skips the computation. Otherwise, it computes the inverse
-## the matrix and sets the value of invA in the cache via the setinverse
-## function.
+## The second function "cacheSolve" calculates the inverse of the original 
+## matrix. However, first it checks if the matrix has already been inversed.
+## If so, it gets the inversed matrix from the cache and skips computations.
+## Otherwise, it computes the inverse of the matrix and sets the value of invA
+## in the cache via the "setinverse" function.
 
-## function "cacheSolve" takes a matrix "A" as an argument
+## Function "cacheSolve" takes, as argument, a matrix "A":
 cacheSolve <- function(A, ...) {
         
         ## First, recover what is in "invA"
         invA <- A$getinverse()
         
-        ## If "invA" is not NULL, then it exists in caching memory and
-        ## it can be recovered quiting "cacheSolve"
+        ## If "invA" is not NULL, then it exists in caching memory. It can 
+        ## be recovered (A as already been inversed) and "cacheSolve" 
+        ## can be quit.
         if(!is.null(invA)) {
                 message("getting cached data")
                 return(invA)
@@ -76,21 +76,21 @@ cacheSolve <- function(A, ...) {
         }
         
         
-        ## the lines below will execute ONLY when "invA" is NULL
-        ## (they could have been written in the "else" braces)
+        ## The lines below will execute ONLY when "invA" is NULL
+        ## (they could have been written in the "else" braces as well):
         
-        ## get the "A" matrix to invert (which has been stored
+        ## 1) get the "A" matrix to invert (which has been stored
         ## outside the "cacheSolve" function environment, when 
-        ## "makeCacheMatrix" was executed or its sub-function "setMX")
+        ## "makeCacheMatrix" was executed or its sub-function "setMX"):
         data <- A$getMx()
         
-        ## proceed with its inversion ("invA" is local)
+        ## 2) proceed with its inversion ("invA" is local):
         invA <- solve(data, ...)
         
-        ## now, store results of the local "invA" computed above 
-        ## outside the "cacheSolve" function environment
+        ## 3) Now, store results of the local "invA" computed above 
+        ## outside the "cacheSolve" function environment:
         A$setinverse(invA)
         
-        ## print local invA
+        ## 4)print local invA:
         invA
 }
